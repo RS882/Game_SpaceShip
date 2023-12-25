@@ -1,26 +1,27 @@
 package GameObjects;
 
 abstract public class GameObject {
-    private double remainingStrength;
+    private double strength;
 
     public GameObject(double remainingStrength) {
-        this.remainingStrength = remainingStrength;
+        this.strength = remainingStrength;
     }
 
-    public double getRemainingStrength() {
-        return this.remainingStrength;
+    public double getStrength() {
+        return this.strength;
     }
 
-    public void setRemainingStrength(double remainingStrength) {
-        this.remainingStrength = remainingStrength;
+    public void setStrength(double strength) {
+        this.strength = strength;
     }
 
-    public abstract void destroy();
+     public abstract void destroy();
+
 
     public abstract void hurt(double amount);
 
     public boolean isAlive() {
-        return this.remainingStrength > 0;
+        return this.strength > 0;
     }
 
 

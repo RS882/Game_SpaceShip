@@ -9,16 +9,11 @@ abstract public class Obstacle extends GameObject {
     }
 
     abstract void encounter();
-    @Override
-    public void destroy() {
 
-        this.setRemainingStrength(0);
-    }
 
     @Override
     public void hurt(double amount) {
-        double targetStrength = this.getRemainingStrength() - amount;
-        this.setRemainingStrength(targetStrength);
-
+        double targetStrength = this.getStrength() - amount;
+        this.setStrength(targetStrength);
     }
 }
