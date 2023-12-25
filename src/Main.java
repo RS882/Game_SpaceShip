@@ -48,11 +48,13 @@ public class Main {
                     new Asteroid(150 + random.nextDouble(350),
                             100 + random.nextDouble(900));
         }
-        System.out.println(Arrays.toString(arrOfObstacle));
+        //System.out.println(Arrays.toString(arrOfObstacle));
 
         SpaceShip spaceShip = new SpaceShip(name,
                 40 + random.nextDouble(20),
                 400 + random.nextDouble(200));
+
+        System.out.println("You have space ship!");
 
         System.out.println(spaceShip);
 
@@ -72,7 +74,7 @@ public class Main {
                 skipObstacle = false;
                 continue;
             }
-            // System.out.println(obst);
+
             obst.encounter();
             if (obst instanceof Asteroid) {
 
@@ -98,21 +100,17 @@ public class Main {
                     if (attackKey == userKey) ship.setAttackPower(shipAttack * 2);
                     else if (Math.abs(attackKey - userKey) != 1) ship.setAttackPower(0);
 
-                    ship.attack(obst);
-                    ship.setAttackPower(shipAttack);
-                    ((Enemy) obst).attack(ship);
-
                     System.out.print(ship);
                     System.out.print(obst);
 
+                    ship.attack(obst);
+                    ship.setAttackPower(shipAttack);
+                    ((Enemy) obst).attack(ship);
                 }
-
             }
-
-            if(!ship.isAlive()) return;
-
+            if (!ship.isAlive()) return;
         }
-        System.out.println(ship);
+
         ship.getWin();
 
         scann.close();
@@ -121,30 +119,12 @@ public class Main {
 
 }
 
-//        Разработать метод playGame.
-//        Игра должна происходить таким образом: игрок по очереди стыкается с каждым
-//        препятствием.
-//        Если препятствием был астероид, игрок должен выбрать, добыть астероид или
-//        его.
-//        Облетание астероида позволяет также пропустить следующее препятствие.
 
-//        Если игрок встречает врага, должен начаться бой, который заканчивается
-//        тогда,
-//        когда один из кораблей будет разрушен.
-//        Во время атаки, игроку предлагается угадать загаданное программой число
-//        от 1 до 5. Если игрок
-//        угадывает число верно, врагу нанесется двойной урон от силы атаки игрока.
-//        Если игрок скажет число на 1 больше или меньше, нанесется обычный урон.
-//        Во всех остальных случаях считаем что игрок промазал, урон не наносится.
-//
-//        Если корабль игрока уничтожен, игра проиграна. Если вражеский корабль
-//        уничтожен, игрок переходит к следующему препятствию.
-//        За уничтожение врага дается 200 очков.
-//        Когда препятствия закончатся, игра считается выигранной, нужно подсчитать
-//        счет игрока по такой формуле:
-//
-//        счет = полученные очки + оставшееся здоровье * 5
-
+//        Идеи:
+//        - Сделать сразу несколько врагов за один бой
+//        - Учесть в счете время прохождения
+//        - Ввести систему энергии или топлива корабля
+//        - Сделать аномалии, которые при встрече просто наносят урон
 
 //Сложность: средне (6/10)
 //
