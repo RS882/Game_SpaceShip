@@ -1,6 +1,8 @@
-package GameObjects;
+package Obstacles;
 
-abstract public class Obstacle extends GameObject{
+import GameObjects.GameObject;
+
+abstract public class Obstacle extends GameObject {
 
     public Obstacle(double remainingStrength) {
         super(remainingStrength);
