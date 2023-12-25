@@ -24,5 +24,12 @@ public class Asteroid extends Obstacle {
     public void destroy() {
         this.value=0;
     }
+
+    @Override
+    public String toString() {
+        return String.format("Asteroid{value=%.2f %s}%n", this.value, super.toString());
+
+
+    }
 }
 

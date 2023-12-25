@@ -15,7 +15,7 @@ abstract public class GameObject {
         this.strength = strength;
     }
 
-     public abstract void destroy();
+    public abstract void destroy();
 
 
     public abstract void hurt(double amount);
@@ -24,5 +24,8 @@ abstract public class GameObject {
         return this.strength > 0;
     }
 
-
+    @Override
+    public String toString() {
+        return String.format("strength=%.2f", this.strength);
+    }
 }

@@ -6,8 +6,9 @@ import GameObjects.GameObject;
 public class Enemy extends Obstacle implements Attacker {
     private double attackPower;
 
-    public Enemy(double remainingStrength) {
+    public Enemy(double remainingStrength, double attackPower) {
         super(remainingStrength);
+        this.attackPower = attackPower;
     }
 
     @Override
@@ -34,4 +35,8 @@ public class Enemy extends Obstacle implements Attacker {
         if (!isAlive()) destroy();
     }
 
+    @Override
+    public String toString() {
+        return String.format("Enemy{attackPower=%.2f %s}%n", this.attackPower, super.toString());
+    }
 }
