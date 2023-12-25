@@ -1,6 +1,7 @@
 import Obstacles.Asteroid;
 import Obstacles.Enemy;
 import Obstacles.Obstacle;
+import SpaceShip.SpaceShip;
 
 import java.security.spec.RSAOtherPrimeInfo;
 import java.sql.SQLOutput;
@@ -34,12 +35,24 @@ public class Main {
         for (int i = 0; i < arrOfObstacle.length; i++) {
 
             arrOfObstacle[i] = (random.nextInt(10) > 3) ?
-                    new Enemy(150 + random.nextDouble(501), 10 + random.nextDouble(101)) :
-                    new Asteroid(150 + random.nextDouble(501), 100 + random.nextDouble(901));
+                    new Enemy(150 + random.nextDouble(351),
+                            10 + random.nextDouble(91)) :
+                    new Asteroid(150 + random.nextDouble(351),
+                            100 + random.nextDouble(901));
         }
         System.out.println(Arrays.toString(arrOfObstacle));
 
+        SpaceShip spaceShip =new SpaceShip(name,
+                40 + random.nextDouble(21),
+                400 + random.nextDouble(201));
+
+        System.out.println(spaceShip);
+
         sc.close();
+    }
+
+    public static void playGame(SpaceShip ship, Obstacle[] obstacles){
+
     }
 }
 

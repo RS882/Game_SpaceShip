@@ -37,6 +37,6 @@ public class Enemy extends Obstacle implements Attacker {
 
     @Override
     public String toString() {
-        return String.format("Enemy{attackPower=%.2f %s}%n", this.attackPower, super.toString());
+        return String.format("Enemy{attackPower=%.2f, %s}%n", this.attackPower, super.toString());
     }
 }

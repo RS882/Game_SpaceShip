@@ -53,5 +53,14 @@ public class SpaceShip extends GameObject implements Attacker {
         this.setStrength(targetStrength);
         if (!isAlive()) destroy();
     }
+
+    @Override
+    public String toString() {
+        return String.format(
+                "SpaceShip{ name=%s, attackPower=%.2f, %s, points=%.2f}%n",
+                this.name, this.attackPower, super.toString(), this.points);
+
+
+    }
 }
 
