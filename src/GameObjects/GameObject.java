@@ -1,4 +1,4 @@
-package GameObject;
+package GameObjects;
 
 abstract public class GameObject {
     private double remainingStrength;
