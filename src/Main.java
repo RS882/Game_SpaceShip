@@ -14,29 +14,25 @@ public class Main {
         Random random;
 
         Scanner sc = new Scanner(System.in);
-//
-//        System.out.print("Enter your space ship name: ");
-//        String name = sc.nextLine();
-//        System.out.println();
-//
-//        System.out.print("Enter game generation key(integer): ");
-//
-//
-//
-//        if (sc.hasNext()) {
-//            final int gKey = sc.nextInt();
-//            random = new Random(gKey);
-//        } else {
-//            System.out.println("Generation key is wrong. The generation key will be 0");
-//            random = new Random();
-//        }
-//
-//
-//
+
+        System.out.print("Enter your space ship name: ");
+        String name = sc.nextLine();
+        System.out.println();
+
+        System.out.print("Enter game generation key(integer): ");
 
 
-        String name = "Ship";
-        random = new Random();
+
+        if (sc.hasNext()) {
+            final int gKey = sc.nextInt();
+            random = new Random(gKey);
+        } else {
+            System.out.println("Generation key is wrong. The generation key will be 0");
+            random = new Random();
+        }
+
+//        String name = "Ship";
+//        random = new Random();
 
         Obstacle[] arrOfObstacle = new Obstacle[5 + random.nextInt(15)];
 
