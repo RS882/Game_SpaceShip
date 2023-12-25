@@ -15,11 +15,13 @@ abstract public class GameObject {
         this.remainingStrength = remainingStrength;
     }
 
-    abstract void destroy();
+    public abstract void destroy();
 
-    abstract void hurt(double amount);
+    public abstract void hurt(double amount);
 
     public boolean isAlive() {
         return this.remainingStrength > 0;
     }
+
+
 }

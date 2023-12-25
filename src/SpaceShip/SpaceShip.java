@@ -2,6 +2,7 @@ package SpaceShip;
 
 import GameObjects.Attacker;
 import GameObjects.GameObject;
+import Obstacles.Asteroid;
 
 public class SpaceShip implements Attacker {
     private String name;
@@ -29,14 +30,10 @@ public class SpaceShip implements Attacker {
 
     @Override
     public void attack(GameObject target) {
-        double targetStrength = target.getRemainingStrength();
-        target.setRemainingStrength(targetStrength - this.attackPower);
+      target.hurt( this.attackPower);
+      if(target instanceof Asteroid && !target.isAlive()) {
+          this.points = ((Asteroid) target).mine();
+      }
     }
 }
 
-//        Разработать класс SpaceShip.SpaceShip (космический корабль).
-//        Добавить ему поле "Название" и "Сила атаки". Этот класс должен
-//        реализовывать интерфейс Attacker.
-//        В методе attack просто повредить target на значение силы атаки.
-//        Добавить в этот класс поле "Количество очков", в конструкторе
-//        инициализировать его нулем.
