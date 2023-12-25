@@ -12,9 +12,8 @@ public class Enemy extends Obstacle implements Attacker {
     }
 
     @Override
-    void encounter() {
-        System.out.println("We have met the enemy!");
-        System.out.printf("Attack power : %,2f.Strength : %,2f.%n",
+    public void encounter() {
+        System.out.printf("We have met the enemy! Attack power : <%.2f>.Strength : <%.2f>.%n",
                 this.attackPower, this.getStrength());
     }
 
@@ -25,14 +24,14 @@ public class Enemy extends Obstacle implements Attacker {
 
     @Override
     public void destroy() {
-
+        setStrength(0);
         System.out.println("Enemy destroyed you got 200 points!");
     }
 
     @Override
     public void hurt(double amount) {
         super.hurt(amount);
-        if (!isAlive()) destroy();
+        if (!isAlive()) this.destroy();
     }
 
     @Override

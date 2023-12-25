@@ -9,14 +9,15 @@ public class Asteroid extends Obstacle {
     }
 
     public double mine() {
+        double res =this.value;
         destroy();
-        System.out.printf("Asteroid mined, (%,.2f) points gained!", this.value);
-        return this.value;
+        System.out.printf("Asteroid mined, (%,.2f) points gained!%n", res);
+        return res;
 
     }
 
     @Override
-    void encounter() {
+    public void encounter() {
         System.out.println("You have found an asteroid with resources!");
     }
 

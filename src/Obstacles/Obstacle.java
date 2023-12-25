@@ -8,7 +8,7 @@ abstract public class Obstacle extends GameObject {
         super(remainingStrength);
     }
 
-    abstract void encounter();
+    public abstract void encounter();
 
 
     @Override
