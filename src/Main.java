@@ -12,39 +12,53 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         Random random;
-
+        final int NUM_OF_ENEMY = 3;
         Scanner sc = new Scanner(System.in);
 
-        System.out.print("Enter your space ship name: ");
-        String name = sc.nextLine();
-        System.out.println();
+//        System.out.print("Enter your space ship name: ");
+//        String name = sc.nextLine();
+//        System.out.println();
+//
+//        System.out.print("Enter game generation key(integer): ");
+//
+//
+//
+//        if (sc.hasNext()) {
+//            final int gKey = sc.nextInt();
+//            random = new Random(gKey);
+//        } else {
+//            System.out.println("Generation key is wrong. The generation key will be 0");
+//            random = new Random();
+//        }
 
-        System.out.print("Enter game generation key(integer): ");
+        String name = "Ship";
+        random = new Random();
 
-
-
-        if (sc.hasNext()) {
-            final int gKey = sc.nextInt();
-            random = new Random(gKey);
-        } else {
-            System.out.println("Generation key is wrong. The generation key will be 0");
-            random = new Random();
-        }
-
-//        String name = "Ship";
-//        random = new Random();
-
-        Obstacle[] arrOfObstacle = new Obstacle[5 + random.nextInt(15)];
+        Obstacle[][] arrOfObstacle = new Obstacle[5 + random.nextInt(15)][NUM_OF_ENEMY];
 
         for (int i = 0; i < arrOfObstacle.length; i++) {
 
-            arrOfObstacle[i] = (random.nextInt(10) > 3) ?
-                    new Enemy(150 + random.nextDouble(350),
-                            10 + random.nextDouble(90)) :
-                    new Asteroid(150 + random.nextDouble(350),
-                            100 + random.nextDouble(900));
+            if (random.nextInt(10) > 3) {
+                int enemys = 1 + random.nextInt(NUM_OF_ENEMY);
+                for (int j = 0; j < enemys; j++) {
+                    double str = (150 + random.nextDouble(350)) / NUM_OF_ENEMY;
+                    double att = (10 + random.nextDouble(90)) / NUM_OF_ENEMY;
+                    arrOfObstacle[i][j] = new Enemy(str, att);
+                }
+
+            } else {
+                arrOfObstacle[i][0] = new Asteroid(
+                        150 + random.nextDouble(350),
+                        100 + random.nextDouble(900));
+            }
+
+
         }
-        //System.out.println(Arrays.toString(arrOfObstacle));
+
+        for (Obstacle[] el : arrOfObstacle) {
+            System.out.println(Arrays.toString(el));
+        }
+
 
         SpaceShip spaceShip = new SpaceShip(name,
                 40 + random.nextDouble(20),
@@ -59,20 +73,21 @@ public class Main {
         sc.close();
     }
 
-    public static void playGame(SpaceShip ship, Obstacle[] obstacles, Random random) {
+    public static void playGame(SpaceShip ship, Obstacle[][] obstacles, Random random) {
         Scanner scann = new Scanner(System.in);
 
         boolean skipObstacle = false;
 
-        for (Obstacle obst : obstacles) {
+        for (Obstacle[] obst : obstacles) {
+            int j = 0;
 
             if (skipObstacle) {
                 skipObstacle = false;
                 continue;
             }
 
-            obst.encounter();
-            if (obst instanceof Asteroid) {
+            obst[j].encounter();
+            if (obst[j] instanceof Asteroid) {
 
                 System.out.println("Mine this asteroid or fly around?");
                 System.out.println("(Flying around an asteroid also allows you to skip the following obstacle.)");
@@ -80,14 +95,14 @@ public class Main {
                 char key = scann.nextLine().charAt(0);
 
                 if (key == 'y') {
-                    while (obst.isAlive()) {
-                        ship.attack(obst);
+                    while (obst[j].isAlive()) {
+                        ship.attack(obst[j]);
                     }
                 } else skipObstacle = true;
 
             }
-            if (obst instanceof Enemy) {
-                while (ship.isAlive() && obst.isAlive()) {
+            if (obst[j] instanceof Enemy) {
+                while (ship.isAlive() && obst[j].isAlive()) {
                     System.out.print("Enter your attack key (integer 1 - 5 : ");
                     char attackKey = ((1 + random.nextInt(5)) + "").charAt(0);
                     char userKey = scann.nextLine().charAt(0);
@@ -97,11 +112,11 @@ public class Main {
                     else if (Math.abs(attackKey - userKey) != 1) ship.setAttackPower(0);
 
                     System.out.print(ship);
-                    System.out.print(obst);
+                    System.out.print(obst[j]);
 
-                    ship.attack(obst);
+                    ship.attack(obst[j]);
                     ship.setAttackPower(shipAttack);
-                    ((Enemy) obst).attack(ship);
+                    ((Enemy) obst[j]).attack(ship);
                 }
             }
             if (!ship.isAlive()) return;
