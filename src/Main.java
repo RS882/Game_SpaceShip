@@ -45,8 +45,10 @@ public class Main {
                 arrOfObstacle[i] = new Obstacle[enemys];
 
                 for (int j = 0; j < enemys; j++) {
-                    double str = (150 + random.nextDouble(500)) / enemys;
-                    double att = (10 + random.nextDouble(90)) / enemys;
+//                    double str = (150 + random.nextDouble(500)) / enemys;
+//                    double att = (10 + random.nextDouble(90)) / enemys;
+                    double str = (0 + random.nextDouble(3)) / enemys;
+                    double att = (0 + random.nextDouble(1)) / enemys;
                     arrOfObstacle[i][j] = new Enemy(str, att);
                 }
 
@@ -65,7 +67,8 @@ public class Main {
 
         SpaceShip spaceShip = new SpaceShip(name,
                 40 + random.nextDouble(20),
-                400 + random.nextDouble(200));
+                400 + random.nextDouble(200),
+                400+ random.nextDouble(400));
 
         System.out.println("You have space ship!");
 
@@ -83,9 +86,11 @@ public class Main {
         boolean skipObstacle = false;
 
         for (Obstacle[] obst : obstacles) {
+            ship.reduceEnergy(10+random.nextDouble(10));
 
             if (skipObstacle) {
                 skipObstacle = false;
+                ship.reduceEnergy(30+random.nextDouble(20));
                 continue;
             }
 
@@ -99,9 +104,10 @@ public class Main {
                 if (key == 'y') {
                     while (obst[0].isAlive()) {
                         ship.attack(obst[0]);
+                        ship.reduceEnergy(5+random.nextDouble(7));
                     }
                 } else skipObstacle = true;
-
+                System.out.print(ship);
             }
             if (obst[0] instanceof Enemy) {
                 for (Obstacle elem : obst) {
@@ -127,6 +133,7 @@ public class Main {
                         System.out.print(elem);
 
                         ship.attack(elem);
+                        ship.reduceEnergy(5+random.nextDouble(7));
                         ship.setAttackPower(shipAttack);
                         ((Enemy) elem).attack(ship);
                     }
@@ -260,7 +267,9 @@ public class Main {
 //        счет = полученные очки + оставшееся здоровье * 5
 //        По выполненю всех задач, реализовать любую новую механику на ваш вкус.
 //        Идеи:
-//        - Сделать сразу несколько врагов за один бой
-//        - Учесть в счете время прохождения
+//        - Сделать сразу несколько врагов за один бой ( до 3 одновременно)
+//        - Учесть в счете время прохождения (бонус до 20с +2000очков. до 30с -100, до 40 -500)
 //        - Ввести систему энергии или топлива корабля
+//(старовый заряд энергии от 400 до 800. стоимость перемещение -от 10 до 20, одна атака - от 5 до 7,
+// облет астероида - от 30-до50)
 //        - Сделать аномалии, которые при встрече просто наносят урон

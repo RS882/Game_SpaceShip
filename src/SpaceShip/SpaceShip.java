@@ -11,10 +11,13 @@ public class SpaceShip extends GameObject implements Attacker {
 
     private double points;
 
-    public SpaceShip(String name, double attackPower, double remainingStrength) {
+    private double energy;
+
+    public SpaceShip(String name, double attackPower, double remainingStrength, double energy) {
         super(remainingStrength);
         this.attackPower = attackPower;
         this.name = name;
+        this.energy=energy;
         this.points = 0;
     }
 
@@ -24,9 +27,20 @@ public class SpaceShip extends GameObject implements Attacker {
     }
 
     public double getAttackPower() {
-        return attackPower;
+        return this.attackPower;
     }
 
+    public double getEnergy() {
+        return this.energy;
+    }
+
+    public void setEnergy(double energy) {
+        this.energy = energy;
+    }
+
+    public void reduceEnergy(double reduce) {
+        this.energy -= reduce;
+    }
 
     public void getWin(double time) {
         double timeBonus = 0;
@@ -70,8 +84,8 @@ public class SpaceShip extends GameObject implements Attacker {
     @Override
     public String toString() {
         return String.format(
-                "SpaceShip{ name=%s, attack=%.2f, %s, points=%.2f}%n",
-                this.name, this.attackPower, super.toString(), this.points);
+                "SpaceShip{ name=%s, attack=%.2f, %s, points=%.2f, energy=%.2f}%n",
+                this.name, this.attackPower, super.toString(), this.points, this.energy);
     }
 }
 
