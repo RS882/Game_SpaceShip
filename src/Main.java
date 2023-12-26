@@ -4,8 +4,6 @@ import Obstacles.Enemy;
 import Obstacles.Obstacle;
 import SpaceShip.SpaceShip;
 
-import java.security.spec.RSAOtherPrimeInfo;
-import java.sql.SQLOutput;
 import java.time.Duration;
 import java.time.LocalTime;
 import java.util.Arrays;
@@ -18,24 +16,23 @@ public class Main {
         final int NUM_OF_ENEMY = 3;
         Scanner sc = new Scanner(System.in);
 
-//        System.out.print("Enter your space ship name: ");
-//        String name = sc.nextLine();
-//        System.out.println();
-//
-//        System.out.print("Enter game generation key(integer): ");
-//
-//
-//
-//        if (sc.hasNext()) {
-//            final int gKey = sc.nextInt();
-//            random = new Random(gKey);
-//        } else {
-//            System.out.println("Generation key is wrong. The generation key will be 0");
-//            random = new Random();
-//        }
+        System.out.print("Enter your space ship name: ");
+        String name = sc.nextLine();
+        System.out.println();
 
-        String name = "Ship";
-        random = new Random();
+        System.out.print("Enter game generation key(integer): ");
+
+
+
+        if (sc.hasNext()) {
+            final int gKey = sc.nextInt();
+            random = new Random(gKey);
+        } else {
+            System.out.println("Generation key is wrong. The generation key will be 0");
+            random = new Random();
+        }
+
+
 
         Obstacle[][] arrOfObstacle = new Obstacle[5 + random.nextInt(15)][];
 
@@ -61,11 +58,11 @@ public class Main {
                 arrOfObstacle[i][0] = new Anomaly(50 + random.nextDouble(10));
             }
         }
-        System.out.println("---------------");
-        for (Obstacle[] el : arrOfObstacle) {
-            System.out.println(Arrays.toString(el));
-        }
-        System.out.println("---------------");
+//        System.out.println("---------------");
+//        for (Obstacle[] el : arrOfObstacle) {
+//            System.out.println(Arrays.toString(el));
+//        }
+//        System.out.println("---------------");
 
         SpaceShip spaceShip = new SpaceShip(name,
                 40 + random.nextDouble(20),
@@ -141,10 +138,14 @@ public class Main {
 
 
                 while (ship.isAlive() && isObstAlive) {
+
                     System.out.print("Enter your attack key (integer 1 - 5) : ");
                     char userKey = scann.nextLine().charAt(0);
 
                     for (int i = 0; i < obst.length; i++) {
+
+                        System.out.print(ship);
+                        System.out.print(obst[i]);
 
                         if (!obst[i].isAlive()) continue;
                         char attackKey = ((1 + random.nextInt(5)) + "").charAt(0);
@@ -152,8 +153,7 @@ public class Main {
                         if (attackKey == userKey) ship.setAttackPower(shipAttack * 2);
                         else if (Math.abs(attackKey - userKey) != 1) ship.setAttackPower(0);
 
-                        System.out.print(ship);
-                        System.out.print(obst[i]);
+
                         if (!ship.isEnergy()) {
                             ship.destroy();
                             return;
@@ -187,19 +187,19 @@ public class Main {
     public static void getBonus(SpaceShip ship, Random random) {
         switch (random.nextInt(10)) {
             case 0:
-                double rAtt = ship.getAttackPower() * 1.25 * (1 + random.nextInt(2));
+                double rAtt = ship.getAttackPower() * 2 * (1 + random.nextInt(2));
                 ship.setAttackPower(rAtt);
                 System.out.printf("You have bonus! Attack power <%.2f>!%n", rAtt);
                 break;
             case 1, 2, 3:
-                double rEner = 50 + random.nextDouble(50);
+                double rEner = 100 + random.nextDouble(200);
                 ship.addEnergy(rEner);
                 System.out.printf("You have bonus! Energy + <%.2f>!%n", rEner);
                 break;
             case 4, 5, 6:
-                double rStr = 50 + random.nextDouble(50);
+                double rStr = 100 + random.nextDouble(200);
                 ship.addStrength(rStr);
-                System.out.printf("You have bonus! Energy + <%.2f>!%n", rStr);
+                System.out.printf("You have bonus! Strength + <%.2f>!%n", rStr);
                 break;
         }
     }
