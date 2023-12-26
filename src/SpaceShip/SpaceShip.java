@@ -28,9 +28,14 @@ public class SpaceShip extends GameObject implements Attacker {
     }
 
 
-    public void getWin() {
+    public void getWin(double time) {
+        double timeBonus = 0;
+        if (time < 20) timeBonus = 2000;
+        else if (time < 30) timeBonus = 1000;
+        else if (time < 40) timeBonus = 500;
+        if (timeBonus != 0) System.out.printf("You nave time bonus <%.2f> points!%n", timeBonus);
         System.out.println("------------------");
-        System.out.printf("You win! You score : %,.2f", this.points + getStrength()*5);
+        System.out.printf("You win! You score : %.2f%n", this.points + getStrength() * 5 + timeBonus);
         System.out.println("------------------");
     }
 

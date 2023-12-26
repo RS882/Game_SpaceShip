@@ -5,6 +5,8 @@ import SpaceShip.SpaceShip;
 
 import java.security.spec.RSAOtherPrimeInfo;
 import java.sql.SQLOutput;
+import java.time.Duration;
+import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.Random;
 import java.util.Scanner;
@@ -43,7 +45,7 @@ public class Main {
                 arrOfObstacle[i] = new Obstacle[enemys];
 
                 for (int j = 0; j < enemys; j++) {
-                    double str = (150 + random.nextDouble(350)) / enemys;
+                    double str = (150 + random.nextDouble(500)) / enemys;
                     double att = (10 + random.nextDouble(90)) / enemys;
                     arrOfObstacle[i][j] = new Enemy(str, att);
                 }
@@ -76,6 +78,7 @@ public class Main {
 
     public static void playGame(SpaceShip ship, Obstacle[][] obstacles, Random random) {
         Scanner scann = new Scanner(System.in);
+        LocalTime currentTime = LocalTime.now();
 
         boolean skipObstacle = false;
 
@@ -110,7 +113,7 @@ public class Main {
 
                 boolean isObstAlive = true;
                 while (ship.isAlive() && isObstAlive) {
-                    System.out.print("Enter your attack key (integer 1 - 5 : ");
+                    System.out.print("Enter your attack key (integer 1 - 5) : ");
                     char userKey = scann.nextLine().charAt(0);
 
                     for (Obstacle elem : obst) {
@@ -138,7 +141,9 @@ public class Main {
             }
             if (!ship.isAlive()) return;
         }
-        ship.getWin();
+        Duration duration = Duration.between(currentTime, LocalTime.now());
+
+        ship.getWin(duration.toSeconds());
 
         scann.close();
     }
@@ -146,7 +151,7 @@ public class Main {
 
 
 //        Идеи:
-//        - Сделать сразу несколько врагов за один бой
+//        + Сделать сразу несколько врагов за один бой
 //        - Учесть в счете время прохождения
 //        - Ввести систему энергии или топлива корабля
 //        - Сделать аномалии, которые при встрече просто наносят урон
