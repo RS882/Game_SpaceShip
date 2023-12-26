@@ -22,8 +22,6 @@ public class Main {
 
         System.out.print("Enter game generation key(integer): ");
 
-
-
         if (sc.hasNext()) {
             final int gKey = sc.nextInt();
             random = new Random(gKey);
@@ -32,12 +30,12 @@ public class Main {
             random = new Random();
         }
 
-
-
         Obstacle[][] arrOfObstacle = new Obstacle[5 + random.nextInt(15)][];
 
         for (int i = 0; i < arrOfObstacle.length; i++) {
+
             double rNum = random.nextDouble(12);
+
             if (rNum > 4.8) {
                 int enemys = 1 + random.nextInt(NUM_OF_ENEMY);
                 arrOfObstacle[i] = new Obstacle[enemys];
@@ -53,9 +51,9 @@ public class Main {
                 arrOfObstacle[i][0] = new Asteroid(
                         150 + random.nextDouble(350),
                         100 + random.nextDouble(900));
-            }else {
+            } else {
                 arrOfObstacle[i] = new Obstacle[1];
-                arrOfObstacle[i][0] = new Anomaly(50 + random.nextDouble(10));
+                arrOfObstacle[i][0] = new Anomaly(50 + random.nextDouble(100));
             }
         }
 //        System.out.println("---------------");
@@ -102,88 +100,92 @@ public class Main {
             }
 
             if (obst[0] instanceof Asteroid) {
-                obst[0].encounter();
-                System.out.println("Mine this asteroid or fly around?");
-                System.out.println("(Flying around an asteroid also allows you to skip the following obstacle.)");
-                System.out.println("Mine : y; Fly around : another  key :");
-                char key = scann.nextLine().charAt(0);
-
-                if (key == 'y') {
-                    while (obst[0].isAlive()) {
-                        if (!ship.isEnergy()) {
-                            ship.destroy();
-                            return;
-                        }
-                        ship.attack(obst[0]);
-                        ship.reduceEnergy(5 + random.nextDouble(7));
-                    }
-
-                } else skipObstacle = true;
-                getBonus(ship, random);
-                System.out.print(ship);
-            }
-            if(obst[0] instanceof Anomaly){
+                meetAsteroid((Asteroid) obst[0], ship, random, scann);
+                if (!ship.isEnergy()) return;
+           }
+            if (obst[0] instanceof Anomaly) {
                 obst[0].encounter();
                 ((Anomaly) obst[0]).attack(ship);
             }
             if (obst[0] instanceof Enemy) {
-                for (Obstacle elem : obst) {
-                    elem.encounter();
-                }
-                System.out.printf("You're being attacked by <%d> enemies!%n", obst.length);
-                System.out.println("--------------");
-
-
-                boolean isObstAlive = true;
-
-
-                while (ship.isAlive() && isObstAlive) {
-
-                    System.out.print("Enter your attack key (integer 1 - 5) : ");
-                    char userKey = scann.nextLine().charAt(0);
-
-                    for (int i = 0; i < obst.length; i++) {
-
-                        System.out.print(ship);
-                        System.out.print(obst[i]);
-
-                        if (!obst[i].isAlive()) continue;
-                        char attackKey = ((1 + random.nextInt(5)) + "").charAt(0);
-                        double shipAttack = ship.getAttackPower();
-                        if (attackKey == userKey) ship.setAttackPower(shipAttack * 2);
-                        else if (Math.abs(attackKey - userKey) != 1) ship.setAttackPower(0);
-
-
-                        if (!ship.isEnergy()) {
-                            ship.destroy();
-                            return;
-                        }
-                        ship.attack(obst[i]);
-                        ship.reduceEnergy(5 + random.nextDouble(7));
-                        ship.setAttackPower(shipAttack);
-                        ((Enemy) obst[i]).attack(ship);
-                        if (!obst[i].isAlive()) getBonus(ship, random);
-
-                    }
-                    isObstAlive = false;
-
-                    for (Obstacle el : obst) {
-                        if (el.isAlive()) {
-                            isObstAlive = true;
-                            break;
-                        }
-                    }
-                }
+                meetEnemy( obst,ship,random,scann);
             }
             if (!ship.isAlive()) return;
         }
         Duration duration = Duration.between(currentTime, LocalTime.now());
 
         ship.getWin(duration.toSeconds());
-
-        scann.close();
     }
 
+    public static boolean meetAsteroid(Asteroid ob, SpaceShip ship, Random random, Scanner scann) {
+        boolean res = false;
+        ob.encounter();
+        System.out.println("Mine this asteroid or fly around?");
+        System.out.println("(Flying around an asteroid also allows you to skip the following obstacle.)");
+        System.out.println("Mine : y; Fly around : another  key :");
+        char key = scann.nextLine().charAt(0);
+
+        if (key == 'y') {
+            while (ob.isAlive()) {
+                if (!ship.isEnergy()) {
+                    ship.destroy();
+                    return res;
+                }
+                ship.attack(ob);
+                ship.reduceEnergy(5 + random.nextDouble(7));
+            }
+
+        } else res = true;
+        getBonus(ship, random);
+        System.out.print(ship);
+
+        return res;
+    }
+    public static void meetEnemy(Obstacle[] obst, SpaceShip ship, Random random, Scanner scann){
+        for (Obstacle elem : obst) {
+            elem.encounter();
+        }
+        System.out.printf("You're being attacked by <%d> enemies!%n", obst.length);
+
+
+        boolean isObstAlive = true;
+        while (ship.isAlive() && isObstAlive) {
+
+            System.out.print("Enter your attack key (integer 1 - 5) : ");
+            char userKey = scann.nextLine().charAt(0);
+
+            for (Obstacle el : obst) {
+
+                System.out.print(ship);
+                System.out.print(el);
+
+                if (!el.isAlive()) continue;
+                char attackKey = ((1 + random.nextInt(5)) + "").charAt(0);
+                double shipAttack = ship.getAttackPower();
+                if (attackKey == userKey) ship.setAttackPower(shipAttack * 2);
+                else if (Math.abs(attackKey - userKey) != 1) ship.setAttackPower(0);
+
+                if (!ship.isEnergy()) {
+                    ship.destroy();
+                    return;
+                }
+                ship.attack(el);
+                ship.reduceEnergy(5 + random.nextDouble(7));
+                ship.setAttackPower(shipAttack);
+                ((Enemy) el).attack(ship);
+                if (!el.isAlive()) getBonus(ship, random);
+
+            }
+            isObstAlive = false;
+
+            for (Obstacle el : obst) {
+                if (el.isAlive()) {
+                    isObstAlive = true;
+                    break;
+                }
+            }
+        }
+    }
     public static void getBonus(SpaceShip ship, Random random) {
         switch (random.nextInt(10)) {
             case 0:
