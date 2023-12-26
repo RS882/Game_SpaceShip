@@ -29,7 +29,9 @@ public class SpaceShip extends GameObject implements Attacker {
 
 
     public void getWin() {
+        System.out.println("------------------");
         System.out.printf("You win! You score : %,.2f", this.points + getStrength()*5);
+        System.out.println("------------------");
     }
 
     @Override
@@ -45,7 +47,9 @@ public class SpaceShip extends GameObject implements Attacker {
     @Override
     public void destroy() {
         setStrength(0);
+        System.out.println("------------------");
         System.out.println("Your space ship is destroyed. You have lost.(");
+        System.out.println("------------------");
     }
 
     @Override
@@ -61,7 +65,7 @@ public class SpaceShip extends GameObject implements Attacker {
     @Override
     public String toString() {
         return String.format(
-                "SpaceShip{ name=%s, attackPower=%.2f, %s, points=%.2f}%n",
+                "SpaceShip{ name=%s, attack=%.2f, %s, points=%.2f}%n",
                 this.name, this.attackPower, super.toString(), this.points);
     }
 }

@@ -11,14 +11,18 @@ public class Asteroid extends Obstacle {
     public double mine() {
         double res =this.value;
         destroy();
+        System.out.println("------------------");
         System.out.printf("Asteroid mined, (%,.2f) points gained!%n", res);
+        System.out.println("------------------");
         return res;
 
     }
 
     @Override
     public void encounter() {
+        System.out.println("=============");
         System.out.println("You have found an asteroid with resources!");
+        System.out.println("=============");
     }
 
     @Override

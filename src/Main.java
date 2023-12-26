@@ -34,31 +34,32 @@ public class Main {
         String name = "Ship";
         random = new Random();
 
-        Obstacle[][] arrOfObstacle = new Obstacle[5 + random.nextInt(15)][NUM_OF_ENEMY];
+        Obstacle[][] arrOfObstacle = new Obstacle[5 + random.nextInt(15)][];
 
         for (int i = 0; i < arrOfObstacle.length; i++) {
 
             if (random.nextInt(10) > 3) {
                 int enemys = 1 + random.nextInt(NUM_OF_ENEMY);
+                arrOfObstacle[i] = new Obstacle[enemys];
+
                 for (int j = 0; j < enemys; j++) {
-                    double str = (150 + random.nextDouble(350)) / NUM_OF_ENEMY;
-                    double att = (10 + random.nextDouble(90)) / NUM_OF_ENEMY;
+                    double str = (150 + random.nextDouble(350)) / enemys;
+                    double att = (10 + random.nextDouble(90)) / enemys;
                     arrOfObstacle[i][j] = new Enemy(str, att);
                 }
 
             } else {
+                arrOfObstacle[i] = new Obstacle[1];
                 arrOfObstacle[i][0] = new Asteroid(
                         150 + random.nextDouble(350),
                         100 + random.nextDouble(900));
             }
-
-
         }
-
+        System.out.println("---------------");
         for (Obstacle[] el : arrOfObstacle) {
             System.out.println(Arrays.toString(el));
         }
-
+        System.out.println("---------------");
 
         SpaceShip spaceShip = new SpaceShip(name,
                 40 + random.nextDouble(20),
@@ -79,55 +80,68 @@ public class Main {
         boolean skipObstacle = false;
 
         for (Obstacle[] obst : obstacles) {
-            int j = 0;
 
             if (skipObstacle) {
                 skipObstacle = false;
                 continue;
             }
 
-            obst[j].encounter();
-            if (obst[j] instanceof Asteroid) {
-
+            if (obst[0] instanceof Asteroid) {
+                obst[0].encounter();
                 System.out.println("Mine this asteroid or fly around?");
                 System.out.println("(Flying around an asteroid also allows you to skip the following obstacle.)");
                 System.out.println("Mine : y; Fly around : another  key :");
                 char key = scann.nextLine().charAt(0);
 
                 if (key == 'y') {
-                    while (obst[j].isAlive()) {
-                        ship.attack(obst[j]);
+                    while (obst[0].isAlive()) {
+                        ship.attack(obst[0]);
                     }
                 } else skipObstacle = true;
 
             }
-            if (obst[j] instanceof Enemy) {
-                while (ship.isAlive() && obst[j].isAlive()) {
+            if (obst[0] instanceof Enemy) {
+                for (Obstacle elem : obst) {
+                    elem.encounter();
+                }
+                System.out.printf("You're being attacked by <%d> enemies!%n", obst.length);
+                System.out.println("--------------");
+
+
+                boolean isObstAlive = true;
+                while (ship.isAlive() && isObstAlive) {
                     System.out.print("Enter your attack key (integer 1 - 5 : ");
-                    char attackKey = ((1 + random.nextInt(5)) + "").charAt(0);
                     char userKey = scann.nextLine().charAt(0);
 
-                    double shipAttack = ship.getAttackPower();
-                    if (attackKey == userKey) ship.setAttackPower(shipAttack * 2);
-                    else if (Math.abs(attackKey - userKey) != 1) ship.setAttackPower(0);
+                    for (Obstacle elem : obst) {
+                        if (!elem.isAlive()) continue;
+                        char attackKey = ((1 + random.nextInt(5)) + "").charAt(0);
+                        double shipAttack = ship.getAttackPower();
+                        if (attackKey == userKey) ship.setAttackPower(shipAttack * 2);
+                        else if (Math.abs(attackKey - userKey) != 1) ship.setAttackPower(0);
 
-                    System.out.print(ship);
-                    System.out.print(obst[j]);
+                        System.out.print(ship);
+                        System.out.print(elem);
 
-                    ship.attack(obst[j]);
-                    ship.setAttackPower(shipAttack);
-                    ((Enemy) obst[j]).attack(ship);
+                        ship.attack(elem);
+                        ship.setAttackPower(shipAttack);
+                        ((Enemy) elem).attack(ship);
+                    }
+                    isObstAlive = false;
+                    for (Obstacle el : obst) {
+                        if (el.isAlive()) {
+                            isObstAlive = true;
+                            break;
+                        }
+                    }
                 }
             }
             if (!ship.isAlive()) return;
         }
-
         ship.getWin();
 
         scann.close();
     }
-
-
 }
 
 
