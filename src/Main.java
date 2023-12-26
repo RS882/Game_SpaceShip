@@ -1,3 +1,4 @@
+import Obstacles.Anomaly;
 import Obstacles.Asteroid;
 import Obstacles.Enemy;
 import Obstacles.Obstacle;
@@ -39,24 +40,25 @@ public class Main {
         Obstacle[][] arrOfObstacle = new Obstacle[5 + random.nextInt(15)][];
 
         for (int i = 0; i < arrOfObstacle.length; i++) {
-
-            if (random.nextInt(10) > 3) {
+            double rNum = random.nextDouble(12);
+            if (rNum > 4.8) {
                 int enemys = 1 + random.nextInt(NUM_OF_ENEMY);
                 arrOfObstacle[i] = new Obstacle[enemys];
 
                 for (int j = 0; j < enemys; j++) {
-//                    double str = (150 + random.nextDouble(500)) / enemys;
-//                    double att = (10 + random.nextDouble(90)) / enemys;
-                    double str = (0 + random.nextDouble(3)) / enemys;
-                    double att = (0 + random.nextDouble(1)) / enemys;
+                    double str = (150 + random.nextDouble(500)) / enemys;
+                    double att = (10 + random.nextDouble(90)) / enemys;
                     arrOfObstacle[i][j] = new Enemy(str, att);
                 }
 
-            } else {
+            } else if (rNum > 1.2) {
                 arrOfObstacle[i] = new Obstacle[1];
                 arrOfObstacle[i][0] = new Asteroid(
                         150 + random.nextDouble(350),
                         100 + random.nextDouble(900));
+            }else {
+                arrOfObstacle[i] = new Obstacle[1];
+                arrOfObstacle[i][0] = new Anomaly(50 + random.nextDouble(10));
             }
         }
         System.out.println("---------------");
@@ -86,7 +88,7 @@ public class Main {
         boolean skipObstacle = false;
 
         for (Obstacle[] obst : obstacles) {
-            if(!ship.isEnergy()){
+            if (!ship.isEnergy()) {
                 ship.destroy();
                 return;
             }
@@ -94,7 +96,7 @@ public class Main {
 
             if (skipObstacle) {
                 skipObstacle = false;
-                if(!ship.isEnergy()){
+                if (!ship.isEnergy()) {
                     ship.destroy();
                     return;
                 }
@@ -111,7 +113,7 @@ public class Main {
 
                 if (key == 'y') {
                     while (obst[0].isAlive()) {
-                        if(!ship.isEnergy()){
+                        if (!ship.isEnergy()) {
                             ship.destroy();
                             return;
                         }
@@ -123,6 +125,10 @@ public class Main {
                 getBonus(ship, random);
                 System.out.print(ship);
             }
+            if(obst[0] instanceof Anomaly){
+                obst[0].encounter();
+                ((Anomaly) obst[0]).attack(ship);
+            }
             if (obst[0] instanceof Enemy) {
                 for (Obstacle elem : obst) {
                     elem.encounter();
@@ -132,7 +138,7 @@ public class Main {
 
 
                 boolean isObstAlive = true;
-                boolean[] isGetBonus = new boolean[obst.length];
+
 
                 while (ship.isAlive() && isObstAlive) {
                     System.out.print("Enter your attack key (integer 1 - 5) : ");
@@ -148,7 +154,7 @@ public class Main {
 
                         System.out.print(ship);
                         System.out.print(obst[i]);
-                        if(!ship.isEnergy()){
+                        if (!ship.isEnergy()) {
                             ship.destroy();
                             return;
                         }
@@ -156,7 +162,7 @@ public class Main {
                         ship.reduceEnergy(5 + random.nextDouble(7));
                         ship.setAttackPower(shipAttack);
                         ((Enemy) obst[i]).attack(ship);
-                        if (!obst[i].isAlive() ) getBonus(ship, random);
+                        if (!obst[i].isAlive()) getBonus(ship, random);
 
                     }
                     isObstAlive = false;
@@ -179,18 +185,18 @@ public class Main {
     }
 
     public static void getBonus(SpaceShip ship, Random random) {
-        switch (random.nextInt(7)) {
+        switch (random.nextInt(10)) {
             case 0:
                 double rAtt = ship.getAttackPower() * 1.25 * (1 + random.nextInt(2));
                 ship.setAttackPower(rAtt);
                 System.out.printf("You have bonus! Attack power <%.2f>!%n", rAtt);
                 break;
-            case 1,2,3:
+            case 1, 2, 3:
                 double rEner = 50 + random.nextDouble(50);
                 ship.addEnergy(rEner);
                 System.out.printf("You have bonus! Energy + <%.2f>!%n", rEner);
                 break;
-            case 4,5,6:
+            case 4, 5, 6:
                 double rStr = 50 + random.nextDouble(50);
                 ship.addStrength(rStr);
                 System.out.printf("You have bonus! Energy + <%.2f>!%n", rStr);
@@ -315,5 +321,5 @@ public class Main {
 //        - Ввести систему энергии или топлива корабля
 //(старовый заряд энергии от 400 до 800. стоимость перемещение -от 10 до 20, одна атака - от 5 до 7,
 // облет астероида - от 30-до50)
-//         - добавлен вероятность получения бонуса после уничтожения препядчтвия( + к атаке, прочночти или енергии)
-//        - Сделать аномалии, которые при встрече просто наносят урон
+//         - добавлен вероятность получения бонуса после уничтожения препядcтвия( + к атаке, прочночти или енергии)
+//        - Сделать аномалии, которые при встрече просто наносят урон (от 50 до 150)
