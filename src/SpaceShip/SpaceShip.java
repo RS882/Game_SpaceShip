@@ -17,7 +17,7 @@ public class SpaceShip extends GameObject implements Attacker {
         super(remainingStrength);
         this.attackPower = attackPower;
         this.name = name;
-        this.energy=energy;
+        this.energy = energy;
         this.points = 0;
     }
 
@@ -34,8 +34,17 @@ public class SpaceShip extends GameObject implements Attacker {
         return this.energy;
     }
 
-    public void setEnergy(double energy) {
-        this.energy = energy;
+    public boolean isEnergy() {
+        return this.energy > 0;
+    }
+
+
+    public void addStrength(double add) {
+        this.setStrength(getStrength() + add);
+    }
+
+    public void addEnergy(double add) {
+        this.energy += add;
     }
 
     public void reduceEnergy(double reduce) {
@@ -66,6 +75,7 @@ public class SpaceShip extends GameObject implements Attacker {
     @Override
     public void destroy() {
         setStrength(0);
+        this.energy=0;
         System.out.println("------------------");
         System.out.println("Your space ship is destroyed. You have lost.(");
         System.out.println("------------------");
